@@ -124,10 +124,11 @@ the `junit.jar` file and the `src` directory for this project (which is where yo
 To run the unit tests you need to again be in the `test` directory and run:
 
 ```bash
-java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/core.jar org.junit.runner.JUnitCore xrate.ExchangeRateTest
+java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/core.jar:../src org.junit.runner.JUnitCore xrate.ExchangeRateTest
 ```
 
 Here again we have to set up the classpath (which needs the additional `hamcrest/core.jar` which is a JUnit 
-dependency). We then say we're running the `JUnitCore` test runner, and passing it out test class name
+dependency); we also need to add `../src` to the classpath so that Java can find your implementation of `ExchangeRateReader`.
+We then say we're running the `JUnitCore` test runner, and passing it out test class name
 (`xrate.ExchangeRateTest`) as an argument telling it where to find the tests. This should run all the
 tests, printing out information on how many passed, etc.
