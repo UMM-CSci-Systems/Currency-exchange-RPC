@@ -104,3 +104,31 @@ example](https://gist.github.com/NicMcPhee/7131454), for example,
 provides a rough overview of what's needed, heavily based
 on [this
 example](http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html).
+
+# Compiling & running the JUnit tests on the command line
+
+If you load this project up in Eclipse, then Eclipse will manage all the weirdness in compiling and running
+the tests. If you want use a lighter-weight editor like Atom and compile and run on the command line,
+however, you'll need to do some slightly fancy command line stuff to get things to work.
+
+To compile the unit tests you need to go into the `test` directory (but no deeper) and run:
+
+```bash
+javac -cp .:/usr/share/java/junit.jar:../src xrate/ExchangeRateTest.java
+```
+
+The `-cp` flag sets the _classpath_, which is where Java will look for other classes while it compiles
+the tests. This is a colon (`:`) separated list of directories and `jar` files, and in this case includes
+the `junit.jar` file and the `src` directory for this project (which is where your RPC code lives).
+
+To run the unit tests you need to again be in the `test` directory and run:
+
+```bash
+java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/core.jar:../src org.junit.runner.JUnitCore xrate.ExchangeRateTest
+```
+
+Here again we have to set up the classpath (which needs the additional `hamcrest/core.jar` which is a JUnit 
+dependency); we also need to add `../src` to the classpath so that Java can find your implementation of `ExchangeRateReader`.
+We then say we're running the `JUnitCore` test runner, and passing it out test class name
+(`xrate.ExchangeRateTest`) as an argument telling it where to find the tests. This should run all the
+tests, printing out information on how many passed, etc.
