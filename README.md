@@ -27,10 +27,8 @@ local function calls.
 ### <span name="RPC_encapsulation"></span> RPC encapsulation
 
 The starter code and some JUnit tests for this part of the lab are provided
-in this repository; you
-should fork this
-project
-and complete your implementation in your group's fork.
+in this repository; after following the github classroom link from canvas you should 
+complete your implementation in your group's new repository.
 
 Financial programs often need access to financial rates such as stock prices and
 exchange rates. There are numerous services out there that provide that
@@ -103,7 +101,7 @@ Internet. [This simple
 example](https://gist.github.com/NicMcPhee/7131454), for example,
 provides a rough overview of what's needed, heavily based
 on [this
-example](http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html).
+example](https://web.archive.org/web/20080930075850/http://www.java-tips.org:80/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html).
 
 # Compiling & running the JUnit tests on the command line
 
