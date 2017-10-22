@@ -16,7 +16,7 @@ a call to a remote service (a service provides currency exchange rate data)
 in a way that allows users to access that service through what appear to be
 local function calls.
 
-##Table of contents
+## Table of contents
 
 -   [RPC encapsulation](#-rpc-encapsulation)
     -   [Reading from a URL](#-reading-from-a-url)
