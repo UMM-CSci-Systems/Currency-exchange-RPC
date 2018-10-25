@@ -1,8 +1,7 @@
 package xrate;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -24,16 +23,25 @@ public class ExchangeRateReader {
      *            the base URL for requests
      */
     public ExchangeRateReader(String baseURL) throws IOException {
-        // TODO Your code here
         /*
          * DON'T DO MUCH HERE!
          * People often try to do a lot here, but the action is actually in
          * the two methods below. All you need to do here is store the
          * provided `baseURL` in a field so it will be accessible later.
          */
+
+        // TODO Your code here
+
+        // Reads the access keys from `etc/access_keys.properties`
         readAccessKeys();
     }
 
+    /**
+     * This reads the `fixer_io` access key from `etc/access_keys.properties`
+     * and assigns it to the field `accessKey`.
+     *
+     * @throws IOException if there is a problem reading the properties file
+     */
     private void readAccessKeys() throws IOException {
         Properties properties = new Properties();
         FileInputStream in = null;
@@ -75,6 +83,8 @@ public class ExchangeRateReader {
      */
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
         // TODO Your code here
+
+        // Remove the next line when you've implemented this method.
         throw new UnsupportedOperationException();
     }
 
@@ -99,6 +109,8 @@ public class ExchangeRateReader {
             String fromCurrency, String toCurrency,
             int year, int month, int day) throws IOException {
         // TODO Your code here
+
+        // Remove the next line when you've implemented this method.
         throw new UnsupportedOperationException();
     }
 }
