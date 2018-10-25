@@ -1,13 +1,16 @@
 package xrate;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Provide access to basic currency exchange rate services.
- * 
- * @author PUT YOUR TEAM NAME HERE
  */
 public class ExchangeRateReader {
+
+    private String accessKey;
 
     /**
      * Construct an exchange rate reader using the given base URL. All requests
@@ -20,7 +23,7 @@ public class ExchangeRateReader {
      * @param baseURL
      *            the base URL for requests
      */
-    public ExchangeRateReader(String baseURL) {
+    public ExchangeRateReader(String baseURL) throws IOException {
         // TODO Your code here
         /*
          * DON'T DO MUCH HERE!
@@ -28,6 +31,31 @@ public class ExchangeRateReader {
          * the two methods below. All you need to do here is store the
          * provided `baseURL` in a field so it will be accessible later.
          */
+        readAccessKeys();
+    }
+
+    private void readAccessKeys() throws IOException {
+        Properties properties = new Properties();
+        FileInputStream in = null;
+        try {
+            // Don't change this filename unless you know what you're doing.
+            // It's crucial that we don't commit the file that contains the
+            // (private) access keys. This file is listed in `.gitignore` so
+            // it's safe to put keys there as we won't accidentally commit them.
+            in = new FileInputStream("etc/access_keys.properties");
+        } catch (FileNotFoundException e) {
+            /*
+             * If this error gets generated, make sure that you have the desired
+             * properties file in your project's `etc` directory. You may need
+             * to rename the file ending in `.sample` by removing that suffix.
+             */
+            System.err.println("Couldn't open etc/access_keys.properties; have you renamed the sample file?");
+            throw(e);
+        }
+        properties.load(in);
+        // This assumes we're using Fixer.io and that the desired access key is
+        // in the properties file in the key labelled `fixer_io`.
+        accessKey = properties.getProperty("fixer_io");
     }
 
     /**
@@ -43,7 +71,7 @@ public class ExchangeRateReader {
      * @param day
      *            the day of the month as an integer
      * @return the desired exchange rate
-     * @throws IOException
+     * @throws IOException if there are problems reading from the server
      */
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
         // TODO Your code here
@@ -65,7 +93,7 @@ public class ExchangeRateReader {
      * @param day
      *            the day of the month as an integer
      * @return the desired exchange rate
-     * @throws IOException
+     * @throws IOException if there are problems reading from the server
      */
     public float getExchangeRate(
             String fromCurrency, String toCurrency,
