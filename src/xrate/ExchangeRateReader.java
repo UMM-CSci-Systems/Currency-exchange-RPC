@@ -1,5 +1,7 @@
 package xrate;
 
+import java.io.IOException;
+
 /**
  * Provide access to basic currency exchange rate services.
  * 
@@ -20,6 +22,12 @@ public class ExchangeRateReader {
      */
     public ExchangeRateReader(String baseURL) {
         // TODO Your code here
+        /*
+         * DON'T DO MUCH HERE!
+         * People often try to do a lot here, but the action is actually in
+         * the two methods below. All you need to do here is store the
+         * provided `baseURL` in a field so it will be accessible later.
+         */
     }
 
     /**
@@ -36,10 +44,8 @@ public class ExchangeRateReader {
      *            the day of the month as an integer
      * @return the desired exchange rate
      * @throws IOException
-     * @throws ParserConfigurationException
-     * @throws SAXException
      */
-    public float getExchangeRate(String currencyCode, int year, int month, int day) {
+    public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
         // TODO Your code here
         throw new UnsupportedOperationException();
     }
@@ -48,8 +54,10 @@ public class ExchangeRateReader {
      * Get the exchange rate of the first specified currency against the second
      * on the specified date.
      * 
-     * @param currencyCode
-     *            the currency code for the desired currency
+     * @param fromCurrency
+     *            the currency code we're exchanging *from*
+     * @param toCurrency
+     *            the currency code we're exchanging *to*
      * @param year
      *            the year as a four digit integer
      * @param month
@@ -58,12 +66,10 @@ public class ExchangeRateReader {
      *            the day of the month as an integer
      * @return the desired exchange rate
      * @throws IOException
-     * @throws ParserConfigurationException
-     * @throws SAXException
      */
     public float getExchangeRate(
             String fromCurrency, String toCurrency,
-            int year, int month, int day) {
+            int year, int month, int day) throws IOException {
         // TODO Your code here
         throw new UnsupportedOperationException();
     }
