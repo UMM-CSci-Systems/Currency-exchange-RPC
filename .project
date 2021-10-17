@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Currency-Exchange</name>
-	<comment></comment>
+	<name>Currency-exchange-RPC</name>
+	<comment>Project Currency-exchange-RPC created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -15,20 +15,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>org.eclipse.wst.common.project.facet.core.builder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1634422381643</id>
+			<id>1634435167183</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
