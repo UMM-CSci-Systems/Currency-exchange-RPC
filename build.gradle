@@ -42,8 +42,6 @@ application {
 test {
   // After running the tests, generate a coverage report
   finalizedBy jacocoTestReport
-  // After running the tests, check the coverage level
-  finalizedBy jacocoTestCoverageVerification
 }
 
 jacocoTestReport {
@@ -55,45 +53,6 @@ jacocoTestReport {
     // location is buried pretty deep in the build directory,
     // so this makes it easier to find.
     html.destination file("${buildDir}/jacocoHtml")
-  }
-}
-
-jacocoTestCoverageVerification {
-  // Running the test verification task automatically runs test first
-  dependsOn test
-
-  // These are the rules applied to the test coverage
-  violationRules {
-    rule {
-      // We are looking at the entire bundle overall, i.e.,
-      // 80% of all instructions across all the Java files
-      // (except Server.java) need to be covered.
-      element = 'BUNDLE'
-
-      // 80% of instructions should be covered
-      limit {
-        counter = 'INSTRUCTION'
-        minimum = 0.8
-      }
-
-      // 80% of lines should be covered
-      limit {
-        counter = 'LINE'
-        minimum = 0.8
-      }
-
-      // 80% of branches should be covered
-      limit {
-        counter = 'BRANCH'
-        minimum = 0.8
-      }
-
-      // 80% of methods should be covered
-      limit {
-        counter = 'METHOD'
-        minimum = 0.8
-      }
-    }
   }
 }
 
