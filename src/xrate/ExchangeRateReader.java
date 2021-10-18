@@ -37,33 +37,22 @@ public class ExchangeRateReader {
     }
 
     /**
-     * This reads the `fixer_io` access key from `etc/access_keys.properties`
-     * and assigns it to the field `accessKey`.
+     * This reads the `fixer_io` access key from from the system
+     * environment and assigns it to the field `accessKey`.
      *
-     * @throws IOException if there is a problem reading the properties file
+     * @throws some sort of exception if we fail to find the
+     *          expected environment variable
      */
-    private void readAccessKeys() throws IOException {
-        Properties properties = new Properties();
-        FileInputStream in = null;
-        try {
-            // Don't change this filename unless you know what you're doing.
-            // It's crucial that we don't commit the file that contains the
-            // (private) access keys. This file is listed in `.gitignore` so
-            // it's safe to put keys there as we won't accidentally commit them.
-            in = new FileInputStream("etc/access_keys.properties");
-        } catch (FileNotFoundException e) {
-            /*
-             * If this error gets generated, make sure that you have the desired
-             * properties file in your project's `etc` directory. You may need
-             * to rename the file ending in `.sample` by removing that suffix.
-             */
-            System.err.println("Couldn't open etc/access_keys.properties; have you renamed the sample file?");
-            throw(e);
+    private void readAccessKeys() {
+        // Read the desired environment variable.
+        String accessKey = System.getenv("fixer_io_access_key");
+        // If that environment variable isn't defined, then
+        // `getenv()` returns `null`. We'll throw a (custom)
+        // exception if that happens since the program can't
+        // really run if we don't have an access key.
+        if (accessKey == null) {
+            throw new MissingAccessKeyException();
         }
-        properties.load(in);
-        // This assumes we're using Fixer.io and that the desired access key is
-        // in the properties file in the key labelled `fixer_io`.
-        accessKey = properties.getProperty("fixer_io");
     }
 
     /**
