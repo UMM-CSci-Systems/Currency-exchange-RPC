@@ -38,7 +38,7 @@ public class ExchangeRateTest {
         float rate = xrReader.getExchangeRate("ZAR", 2010, 9, 9);
         assertEquals(9.165675, rate, DELTA);
     }
-    
+
     @Test
     public void checkUSDvsGBP20100625() throws IOException {
         ExchangeRateReader xrReader = new ExchangeRateReader(NICS_DUMMY_DATA_URL);
@@ -48,7 +48,7 @@ public class ExchangeRateTest {
 
     // TO GET THIS TEST TO RUN YOU NEED TO ADD A VALID ACCESS KEY IN THE URL
     @Test
-    @Ignore
+    @Ignore("Ignore (skip) this until you're ready to start to hit fixer.io when you run your tests")
     public void checkUSDvsGBP20100625online() throws IOException {
         ExchangeRateReader xrReader = new ExchangeRateReader("http://data.fixer.io/api/");
         float rate = xrReader.getExchangeRate("USD", "GBP", 2010, 6, 25);
