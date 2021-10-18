@@ -39,6 +39,10 @@ application {
   mainClass = 'xrate.Main'
 }
 
+run {
+  standardInput = System.in
+}
+
 test {
   // After running the tests, generate a coverage report
   finalizedBy jacocoTestReport
