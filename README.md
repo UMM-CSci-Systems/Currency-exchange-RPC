@@ -1,5 +1,7 @@
 # Remote procedure call (RPC) for Currency Exchange <!-- omit in toc -->
 
+## Overview
+
 This lab explores the idea of client-server organization.  In a client-server
 configuration one central machine called the **server** acts as a central source
 for some resource or service.  Other machines known as **clients** utilize the
@@ -16,11 +18,10 @@ a call to a remote service (a service which provides currency exchange rate data
 in a way that allows users to access that service through what appear to be
 local function calls.
 
+- [Overview](#overview)
 - [RPC encapsulation](#rpc-encapsulation)
   - [Reading from a URL](#reading-from-a-url)
   - [Parsing JSON](#parsing-json)
-
-------------------------------------------------------------------------
 
 ## RPC encapsulation
 
