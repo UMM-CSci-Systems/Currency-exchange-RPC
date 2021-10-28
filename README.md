@@ -22,6 +22,7 @@ local function calls.
 - [RPC encapsulation](#rpc-encapsulation)
   - [Reading from a URL](#reading-from-a-url)
   - [Parsing JSON](#parsing-json)
+- [Something about environment variables](#something-about-environment-variables)
 
 ## RPC encapsulation
 
@@ -64,7 +65,7 @@ codes](http://en.wikipedia.org/wiki/ISO_4217), and dates are the year
 
 We've provided
 some simple JUnit tests and a stub in the project. The
-first four tests all reference static JSON files which Nic has provided on
+first four tests all reference static JSON files provided on
 `facultypages.morris.umn.edu`; these are also included in the project in the
 `JSON_files` directory. The fifth one (which is initially marked with
 `@Ignore` so it won't actually run) refers to Fixer's web site. You should
@@ -73,8 +74,7 @@ we don't want to be hammering on Fixer's web site while we're trying to
 get our code to work. When you're ready to run that last test just
 remove the `@Ignore` line, add a working access key, and it will run.
 
-There are two major pieces
-here that you may have never seen:
+There are two major pieces here that you may have never seen:
 
 - You'll need to read the result of requesting a URL
 - You'll need to parse an JSON document
@@ -90,23 +90,30 @@ InputStream inputStream = url.openStream();
 ```
 
 will generate an `InputStream` that will provide the (HTML) contents of
-the Morris home page. You can then pass that `InputStream` to any other reading
+the University of Minnesota Morris home page. You can then pass that `InputStream` to any other reading
 tools like a `BufferedReader` or (or more importantly for this lab) an
 JSON parser.
 
 ### Parsing JSON
 
 There are a ton of Java JSON parsing tools out there, including several
-included as part of Java's standard libraries. We're not going to provide
-a full tutorial here, but there's lots of stuff out there on the
-Internet. We recommend using [Google's GSON library](https://github.com/google/gson);
-there's [a simple example on StackOverflow](https://stackoverflow.com/a/31743324/2557372) that (very briefly) includes
-everything you need here.
+included as part of Java's standard libraries. ["How to Parse JSON in Java?"](https://coderolls.com/parse-json-in-java/)
+does a nice job of reviewing several of the more popular ones, including
+simple examples of each. We used the
+[JSON-java](https://github.com/stleary/JSON-java)
+library, and the following discussion will be based on that, but you can certainly
+use a different library if you prefer.
 
-The basic structure is:
+The basic structure of our solution is:
 
-- Construct a `Reader` on the `InputStream` you get from `URL` as described above.
-- Use a GSON `JsonParser` to parse the contents of that reader using something like `new JsonParser().parse(reader).getAsJsonObject()`. This returns a `JsonObject`.
-- Once you have a GSON `JsonObject` you can use methods like `get()` and `getAsJsonObject()` to walk through the JSON object extracting components as necessary.
+- Construct a `JSONTokener` using the `InputStream` you get from `URL`
+  (as described above).
+- Construct a `JSONObject` using the `JSONTokener` you just built.
+- Once you have a `JSONObject` you can use method calls like
+  `getJSONObject("rates")` and `getFloat(currencyCode)` to extract the
+  necessary elements from the returned JSON.
 
-You might want to write a method `getRate(JsonObject ratesInfo, String currency)` that encapsulates the walking through the JSON object so you don't end up repeating that logic in your solution.
+You might want to write a method `getRateForCurrency(JsonObject ratesInfo, String currency)` that encapsulates the walking through the JSON object so you don't end up repeating that logic in your solution.
+
+## Something about environment variables
+
