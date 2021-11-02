@@ -22,7 +22,11 @@ local function calls.
 - [RPC encapsulation](#rpc-encapsulation)
   - [Reading from a URL](#reading-from-a-url)
   - [Parsing JSON](#parsing-json)
-- [Something about environment variables](#something-about-environment-variables)
+- [Building and running this project](#building-and-running-this-project)
+  - [The Gradle build tool](#the-gradle-build-tool)
+  - [Using environment variables to store access keys](#using-environment-variables-to-store-access-keys)
+  - [How do you set an environment variable?](#how-do-you-set-an-environment-variable)
+  - [Environment variables and GithubActions](#environment-variables-and-githubactions)
 
 ## RPC encapsulation
 
@@ -40,6 +44,10 @@ rates for a number of major currency for that date. If you add a working access 
 generates an JSON document containing a variety of exchange rates for the date specified in the URL (15 Oct 2008). See [Fixer's
 documentation](https://fixer.io/documentation)
 for more info.
+
+:bangbang: Managing access keys (which should inherently be private) is somewhat
+tricky with public repositories like we have here on GitHub.com. There's more below
+on how we're going to handle this.
 
 This is nice if we just want to look up a single date and
 read through it by hand, but is somewhat awkward if we want to access
@@ -94,6 +102,12 @@ the University of Minnesota Morris home page. You can then pass that `InputStrea
 tools like a `BufferedReader` or (or more importantly for this lab) an
 JSON parser.
 
+In this problem, you'll need to
+make sure to construct a full URL, with the relevant query information and
+(especially when talking directly to Fixer.io) including the API key. There's
+an example of what this looks like up above, and there are more details and
+examples in [the Fixer.io documentation](https://fixer.io/documentation).
+
 ### Parsing JSON
 
 There are a ton of Java JSON parsing tools out there, including several
@@ -115,5 +129,128 @@ The basic structure of our solution is:
 
 You might want to write a method `getRateForCurrency(JsonObject ratesInfo, String currency)` that encapsulates the walking through the JSON object so you don't end up repeating that logic in your solution.
 
-## Something about environment variables
+## Building and running this project
 
+### The Gradle build tool
+
+This project is set up to use the `gradle` build tool to compile the project
+and run the tests. The `gradle` configuration is in the `build.gradle` file;
+you can ignore more of this but there are a few bits where it might be useful
+or necessary to make changes there. In particular `gradle` is responsible for
+managing dependencies on external libraries like JSON-Java. We have that
+dependency already listed in the `dependencies` section of `build.gradle`,
+but if you choose to use a different library you'll need to add (and commit)
+that dependency.
+
+There is a `main()` which will prompt you for a currency code and return the
+exchange rate for that currency. To run that:
+
+```text
+   ./gradlew --console=plain --quiet run
+```
+
+You don't strictly need `--console=plain --quiet`, but including them will
+reduce the amount of noise that `gradle` outputs.
+
+To run the tests:
+
+```text
+    ./gradlew test
+```
+
+Both of these will ensure that all dependencies are downloaded and everything
+is compiled and up-to-date before running the program or tests.
+
+:bangbang: All of this will fail until you've set the `FIXER_IO_ACCESS_KEY`
+environment variable as described below. If all your tests fail check to see
+if the `MissingAccessKeyException` is being thrown. If it is, then that's
+your problem.
+
+### Using environment variables to store access keys
+
+There's a tricky question here about how to handle access keys. Some
+options include:
+
+- Putting the access key directly in the code
+  - You could, e.g., define a string constant that is the API key and concatenate
+    it into URL strings as needed.
+- Put the access key in a properties or configuration file
+  - You could then read it from that file, and use it to build URL strings
+    as needed.
+- Store the access key from an environment variable
+  - You could then read it from the environment, and use it to build URL strings
+    as needed.
+
+The first two of these have a challenge because in both cases there's a natural
+tendency (and thus a risk) that someone will _commit_ that code and your API key
+will be publicly visible on GitHub.com.
+
+You can partially deal with this by using `.gitignore` to indicate that a particular
+source or properties/configuration file should never be committed. You really need
+to isolate the access key in a single (small) file, though, for this to work. In the
+first approach, for example, if the access key is defined in a file that has a ton
+of other important logic in it then `.gitignore`ing it will prevent a lot of other
+code from being committed, which will be a significant problem.
+
+Both the first and second approaches have serious issues with a continuous
+integration (CI) system like GitHub Actions. CI systems typically clones the
+repository and expect it to build "as is". If you've used `.gitignore` to prevent
+an important file from being committed, then the code the CI gets in a clone
+either won't compile at all, or will compile but fail at runtime when the
+necessary properties/configuration file turns out to be missing.
+
+So the "recommended" approach these days is to use environment variables, and
+that's how this code is set up, as illustrated in the `readAccessKey()` method
+in `ExchangeRateReader.java`:
+
+```java
+    private void readAccessKey() {
+        // Read the desired environment variable.
+        accessKey = System.getenv("FIXER_IO_ACCESS_KEY");
+        // If that environment variable isn't defined, then
+        // `getenv()` returns `null`. We'll throw a (custom)
+        // exception if that happens since the program can't
+        // really run if we don't have an access key.
+        if (accessKey == null) {
+            throw new MissingAccessKeyException();
+        }
+    }
+```
+
+Here this uses `System.getenv()` to read the value of the specified
+environment variable, `"FIXER_IO_ACCESS_KEY"` in this case. Each user will then
+need to define that variable in their development environment for this code to
+actually run; if they don't the code will throw a `MissingAccessKeyException`.
+
+### How do you set an environment variable?
+
+How you set an environment variable differs depending on your operatoring system
+and shell. For `bash`-based systems (the lab computers and most MacOS systems)
+a command like:
+
+```bash
+   export FIXER_IO_ACCESS_KEY="frogs-are-green"
+```
+
+will set the variable (`FIXER_IO_ACCESS_KEY`) to have the specified value
+(`"frogs-are-green"` in this case). :warning: Unlike most computing languages,
+you can _not_ have white space on either side of the `=` in an assignment like
+that.
+
+The `export` is necessary to make sure this assignment is "exported" to any child
+processes/shells created from this shell. That's necessary so that the assignment
+will be visible in processes or shells created by or run from this shell; without
+it those child processes won't know anything about this variable assignment. Since
+we need this to be visible when we run the code with `gradle`, it's vital that we
+include the `export`. (See posts like ["Defining a Bash Variable with or without `export`"](https://www.baeldung.com/linux/bash-variables-export) for more details.)
+
+You _could_ add this to something like your `.bashrc` or `.bash_profile` so it will
+be automatically assigned in every shell you create, but then you'd need to make
+that file only readable by you to protect the API key from snoopy people. Since
+you'll only need this for a brief period (a week-ish), then it's probably easiest
+to just re-define it at each work session so you don't have to remember to remove
+it from whatever setup you create.
+
+### Environment variables and GithubActions
+
+**Explain this here**
