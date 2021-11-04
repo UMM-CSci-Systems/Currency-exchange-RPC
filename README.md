@@ -1,4 +1,16 @@
+[![Actions Status](../../workflows/tests/badge.svg)](../../actions?query=workflow%3Atests)
 # Remote procedure call (RPC) for Currency Exchange <!-- omit in toc -->
+
+- [Overview](#overview)
+- [RPC encapsulation](#rpc-encapsulation)
+  - [Reading from a URL](#reading-from-a-url)
+  - [Parsing JSON](#parsing-json)
+- [Building and running this project](#building-and-running-this-project)
+  - [The Gradle build tool](#the-gradle-build-tool)
+  - [Using environment variables to store access keys](#using-environment-variables-to-store-access-keys)
+  - [How do you set an environment variable?](#how-do-you-set-an-environment-variable)
+  - [Environment variables and GithubActions](#environment-variables-and-githubactions)
+- [What to turn in](#what-to-turn-in)
 
 ## Overview
 
@@ -17,16 +29,6 @@ JSON-based web service as a simple remote procedure call (RPC), where we wrap
 a call to a remote service (a service which provides currency exchange rate data)
 in a way that allows users to access that service through what appear to be
 local function calls.
-
-- [Overview](#overview)
-- [RPC encapsulation](#rpc-encapsulation)
-  - [Reading from a URL](#reading-from-a-url)
-  - [Parsing JSON](#parsing-json)
-- [Building and running this project](#building-and-running-this-project)
-  - [The Gradle build tool](#the-gradle-build-tool)
-  - [Using environment variables to store access keys](#using-environment-variables-to-store-access-keys)
-  - [How do you set an environment variable?](#how-do-you-set-an-environment-variable)
-  - [Environment variables and GithubActions](#environment-variables-and-githubactions)
 
 ## RPC encapsulation
 
@@ -149,6 +151,12 @@ exchange rate for that currency. To run that:
    ./gradlew --console=plain --quiet run
 ```
 
+:information_source: The use of `gradlew` instead of `gradle` may seem
+confusing. `gradlew` is a _wrapper_ (hence the `w`) script that actually
+downloads and installs (in your project's `.gradle` directory) the appropriate
+version of `gradle` and runs that local version. This ensures consistency
+across machines and setups.
+
 You don't strictly need `--console=plain --quiet`, but including them will
 reduce the amount of noise that `gradle` outputs.
 
@@ -253,4 +261,30 @@ it from whatever setup you create.
 
 ### Environment variables and GithubActions
 
-**Explain this here**
+One of the big reasons we're using environment variables instead of the other two
+options (putting the key in code or in a properties file) is that this allows us
+to run our tests in GitHub Actions without committing the secret info (in this
+case, the Fixer.io access key). Like most other continuous integration systems
+these days, GitHub provides support for secret environment variables, where
+our secrets are held in an encrypted form and then provided as environment
+variables to the build process in GitHub Actions; see [the GitHub Encrypted
+Secrets documentation](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
+for more details.
+
+GitHub's tools support including the secret at the level of the repository,
+a user-level environment, or an organization. If you're doing this lab as part
+of a course using GitHub Classroom, the instructor has probably added the
+key to the classroom organization so your GitHub Actions builds should "just
+work" for you. If they don't, and the problem seems to be an missing access
+key contact the instructor for help; in a pinch you could add the key as an
+encrypted secret at the repository level.
+
+## What to turn in
+
+You should complete the code in `ExchangeRateReader.java` so that
+
+- [ ] The tests pass locally (`/.gradlew test`)
+- [ ] The tests pass on GitHub (your badge should turn green)
+- [ ] The code is clean and clear.
+
+Also make sure to submit a link to your repository.
