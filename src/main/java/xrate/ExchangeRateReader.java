@@ -23,19 +23,24 @@ public class ExchangeRateReader {
         /*
          * DON'T DO MUCH HERE! People often try to do a lot here, but the action is
          * actually in the two methods below. All you need to do here is store the
-         * provided `baseURL` in a field so it will be accessible later.
+         * provided `baseURL` in a field (which you have to declare) so it will be
+         * accessible in the two key functions. (You'll need it there to construct
+         * the full URL.)
          */
 
         // TODO Your code here
 
         // Reads the Fixer.io API access key from the appropriate
         // environment variable.
+        // You don't have to change this call.
         readAccessKey();
     }
 
     /**
      * This reads the `fixer_io` access key from from the system environment and
      * assigns it to the field `accessKey`.
+     * 
+     * You don't have to change anything here.
      */
     private void readAccessKey() {
         // Read the desired environment variable.
@@ -61,6 +66,24 @@ public class ExchangeRateReader {
      * @throws IOException if there are problems reading from the server
      */
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
+        /*
+         * Here you should:
+         * 
+         *   - Construct the appropriate URL
+         *     - This needs to have the date (properly formatted)
+         *       and access key. See the Fixer.io documentation for
+         *       the details.
+         *   - Open a stream from the URL
+         *   - Construct a Tokener from that stream
+         *   - Use that to parse the response into a JSON object
+         *   - Extract the desired currency code from that JSON object
+         *     - Look at the structure of JSON objects returned by Fixer.io.
+         *     - You'll need to extract the "rates" (sub)object from the parsed
+         *       JSON object.
+         *     - You'll need to get the `float` associated with the desired
+         *       currency code from the "rates" object. 
+         */
+
         // TODO Your code here
 
         // Remove the next line when you've implemented this method.
@@ -81,6 +104,16 @@ public class ExchangeRateReader {
      */
     public float getExchangeRate(String fromCurrency, String toCurrency, int year, int month, int day)
             throws IOException {
+        /*
+         * This is similar to the previous method except that you have to get
+         * the two currency rates and divide one by the other to get their
+         * relative exchange rate.
+         * 
+         * DON'T FORGET HOW TO PROGRAM! Extract helper functions to clarify
+         * what's going on, and try to avoid duplicate logic between this and
+         * the previous method.
+         */
+        
         // TODO Your code here
 
         // Remove the next line when you've implemented this method.
