@@ -1,5 +1,6 @@
-[![Tests](../../actions/workflows/gradle_tests.yml/badge.svg)](../../actions/workflows/gradle_tests.yml)
 # Remote procedure call (RPC) for Currency Exchange <!-- omit in toc -->
+
+[![Tests](../../actions/workflows/gradle_tests.yml/badge.svg)](../../actions/workflows/gradle_tests.yml)
 
 - [Overview](#overview)
 - [RPC encapsulation](#rpc-encapsulation)
@@ -57,7 +58,7 @@ this data programmatically (i.e., as part of a piece of software we're
 writing). The goal of this lab is to build a simple remote procedure call (RPC)
 encapsulation of this service, essentially providing a wrapper that
 isolates users (programmers in this case) from the details of accessing
-and parsing the data. We'll provide two key methods:
+and parsing the data. In this lab you'll provide implementations for two key methods:
 
 ```java
 public float getExchangeRate(String currencyCode, int year, int month, int day);
@@ -73,8 +74,16 @@ codes](http://en.wikipedia.org/wiki/ISO_4217), and dates are the year
 (as a four digit integer), the month as a two digit integer (01=Jan,
 12=Dec), and the day of the month as a two digit integer.
 
-We've provided
-some simple JUnit tests and a stub in the project. The
+We've provided stubs for both of these in the project in the `ExchangeRateReader`
+class. Our stubs both throw `UnsupportedOperationException`s; this is a way of
+telling Java that you haven't (yet) implemented a method. By throwing them here
+we're ensuring that an exception will be thrown (and all dependent tests will
+fail) until you've actually implemented the methods. Once you have one of them
+implemented, you should remove the `throws` line or your tests will continue to
+fail even if you've got everything working.
+
+We've also provided
+some simple JUnit tests in the project in `ExchangeRateTest`. The
 first four tests all reference static JSON files provided on
 `facultypages.morris.umn.edu`; these are also included in the project in the
 `JSON_files` directory. The fifth one (which is initially marked with
@@ -232,7 +241,7 @@ actually run; if they don't the code will throw a `MissingAccessKeyException`.
 
 ### How do you set an environment variable?
 
-How you set an environment variable differs depending on your operatoring system
+How you set an environment variable differs depending on your operating system
 and shell. For `bash`-based systems (the lab computers and most MacOS systems)
 a command like:
 
