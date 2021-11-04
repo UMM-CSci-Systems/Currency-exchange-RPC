@@ -1,4 +1,4 @@
-[![tests](../../workflows/gradle_tests.yml/badge.svg)](../../actions/workflows/gradle_tests.yml)
+[![Tests](../../actions/workflows/gradle_tests.yml/badge.svg)](../../actions/workflows/gradle_tests.yml)
 # Remote procedure call (RPC) for Currency Exchange <!-- omit in toc -->
 
 - [Overview](#overview)
