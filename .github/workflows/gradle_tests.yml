@@ -22,4 +22,6 @@ jobs:
           ${{ runner.os }}-gradle-
 
     - name: Build with Gradle
+      env:
+        FIXER_IO_ACCESS_KEY: ${{ secrets.FIXER_IO_ACCESS_KEY }}
       run: ./gradlew build
